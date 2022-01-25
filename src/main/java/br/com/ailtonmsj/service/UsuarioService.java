@@ -26,21 +26,15 @@ public class UsuarioService extends AbstractUsuarioService {
                 .collect(Collectors.toList());
     }
 
-    public List<Usuario> add(Usuario usuario) {
+    public Usuario add(Usuario usuario) {
     	
     	log.info("Preparando para adicinar usuario - " + usuario);
     	
         dynamoDB.putItem(putRequest(usuario));
         
-        //dynamoDB.putItem(putRequest(usuario)).
-        
-        return findAll();
+        return usuario;
     }
 
-//    public Usuario get(Integer id) {
-//        return Usuario.from(dynamoDB.getItem(getRequest(id)).item());
-//    }
-    
     public Usuario get(String nome) {
         return Usuario.from(dynamoDB.getItem(getRequest(nome)).item());
     }

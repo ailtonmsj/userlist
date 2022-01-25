@@ -28,7 +28,6 @@ public class Usuario {
     public static Usuario from(Map<String, AttributeValue> item) {
         Usuario usuario = new Usuario();
         if (item != null && !item.isEmpty()) {
-//            usuario.setId(item.get(AbstractUsuarioService.USUARIO_ID_COL).n());
             usuario.setNome(item.get(AbstractUsuarioService.USUARIO_NOME_COL).s());
             usuario.setSobrenome(item.get(AbstractUsuarioService.USUARIO_SOBRENOME_COL).s());
             usuario.setIdade(item.get(AbstractUsuarioService.USUARIO_IDADE_COL).n());

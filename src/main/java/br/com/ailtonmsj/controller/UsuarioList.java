@@ -1,6 +1,5 @@
 package br.com.ailtonmsj.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -41,15 +40,6 @@ public class UsuarioList {
 		return usuarios;
     }
     
-//    @GET
-//    @Path("{id}")
-//    public Usuario getSingle(@PathParam("id") Integer id) {
-//    	
-//    	log.info("Obtendo usuario id " + id);
-//    	
-//        return usuarioService.get(id);
-//    }
-    
     @GET
     @Path("{nome}")
     public Usuario getSingle(@PathParam("id") String nome) {
@@ -60,7 +50,7 @@ public class UsuarioList {
     }
 
     @POST
-    public List<Usuario> add(Usuario usuario) {
+    public Usuario add(Usuario usuario) {
     	
     	log.info("adicionando usuário" + usuario);
     	
