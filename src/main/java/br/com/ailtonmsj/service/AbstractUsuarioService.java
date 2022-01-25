@@ -3,7 +3,6 @@ package br.com.ailtonmsj.service;
 import java.util.HashMap;
 import java.util.Map;
 
-import br.com.ailtonmsj.dto.Fruit;
 import br.com.ailtonmsj.dto.Usuario;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;

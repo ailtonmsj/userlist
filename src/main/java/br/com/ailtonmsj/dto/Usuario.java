@@ -29,10 +29,10 @@ public class Usuario {
         Usuario usuario = new Usuario();
         if (item != null && !item.isEmpty()) {
 //            usuario.setId(item.get(AbstractUsuarioService.USUARIO_ID_COL).n());
-            usuario.setNome(item.get(AbstractUsuarioService.USUARIO_NOME_COL).n());
-            usuario.setSobrenome(item.get(AbstractUsuarioService.USUARIO_SOBRENOME_COL).n());
+            usuario.setNome(item.get(AbstractUsuarioService.USUARIO_NOME_COL).s());
+            usuario.setSobrenome(item.get(AbstractUsuarioService.USUARIO_SOBRENOME_COL).s());
             usuario.setIdade(item.get(AbstractUsuarioService.USUARIO_IDADE_COL).n());
-            usuario.setPais(item.get(AbstractUsuarioService.USUARIO_PAIS_COL).n());
+            usuario.setPais(item.get(AbstractUsuarioService.USUARIO_PAIS_COL).s());
             
             if(item.get(AbstractUsuarioService.USUARIO_STATUS_COL) != null) {
             	usuario.setStatus(item.get(AbstractUsuarioService.USUARIO_STATUS_COL).bool());
