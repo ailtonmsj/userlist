@@ -39,7 +39,7 @@ public class UsuarioList {
     	
 		return usuarios;
     }
-    
+/*    
     @GET
     @Path("{nome}")
     public Usuario getSingle(@PathParam("id") String nome) {
@@ -56,4 +56,5 @@ public class UsuarioList {
     	
     	return usuarioService.add(usuario);
     }
+*/
 }

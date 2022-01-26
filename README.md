@@ -1,71 +1,92 @@
-# userlist Project
+# Userlist Project
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Projeto baseado em Quarkus para possibilitar a listagem de usuarios. 
 
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+## Executar a aplicação in dev mode
 
-## Running the application in dev mode
-
-You can run your application in dev mode that enables live coding using:
+Executando com live coding:
 ```shell script
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at http://localhost:8080/q/dev/.
-
-## Packaging and running the application
-
-The application can be packaged using:
-```shell script
-./mvnw package
+# Build da Imagem Docker
 ```
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
-
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-```shell script
-./mvnw package -Dquarkus.package.type=uber-jar
+mvn package
+docker build -f src/main/docker/Dockerfile.jvm -t <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0 .
+docker push <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
 
-## Creating a native executable
-
-You can create a native executable using: 
+# Testando a aplicação:
 ```shell script
-./mvnw package -Pnative
+curl --location --request GET 'http:\<DNS\>/usuario'
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using: 
-```shell script
-./mvnw package -Pnative -Dquarkus.native.container-build=true
+## Aplicar os manifestos presentes em "src/main/kubernetes" para o deploy ocorrer:
+## Importante:
+- Necessário uma Infra com o Service Mesh
+- Alterar a imagem existente no arquivo 02.deployament.yaml
+- Se ambiente de execução AWS deve ter acesso nas tabelas do DynamoDB
+- Link do terraform para criação da infra: https://github.com/ailtonmsj/aws-new-stack
+```
+...
+containers:
+      - image: <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
+        name: userlist-jvm
+...
 ```
 
-You can then execute your native executable with: `./target/userlist-1.0.0-SNAPSHOT-runner`
+### Executar:
+```
+kubectl apply -f src/main/kubernetes
+```
 
-If you want to learn more about building native executables, please consult https://quarkus.io/guides/maven-tooling.
+# Testes locais
 
-## Related Guides
+### Container para simular dynamodb:
+```
+docker run --publish 8000:8000 amazon/dynamodb-local:1.11.477 -jar DynamoDBLocal.jar -inMemory -sharedDb
+```
 
-- REST Client ([guide](https://quarkus.io/guides/rest-client)): Call REST services
-- RESTEasy JAX-RS ([guide](https://quarkus.io/guides/rest-json)): REST endpoint framework implementing JAX-RS and more
-- SmallRye Health ([guide](https://quarkus.io/guides/microprofile-health)): Monitor service health
+### Acessar no browser
+```
+http://localhost:8000
+```
 
-## Provided Code
 
-### REST Client
+### Schema de banco de dados:
+```
+var params = {
+    TableName: 'AwsNewStackUsuario',
+    KeySchema: [{ AttributeName: 'nome', KeyType: 'HASH' }],
+    AttributeDefinitions: [{  AttributeName: 'nome', AttributeType: 'S', }],
+    ProvisionedThroughput: { ReadCapacityUnits: 1, WriteCapacityUnits: 1, }
+};
 
-Invoke different services through REST with JSON
+dynamodb.createTable(params, function(err, data) {
+    if (err) ppJson(err);
+    else ppJson(data);
+});
+```
 
-[Related guide section...](https://quarkus.io/guides/rest-client)
+## Alterar o applications.properties para esse valor de acordo com o ambiente do dynamodb:
 
-### RESTEasy JAX-RS
+### Esses valores são para testes locais
+```
+quarkus.dynamodb.endpoint-override=http://localhost:8000
 
-Easily start your RESTful Web Services
+quarkus.dynamodb.aws.region=eu-central-1
+quarkus.dynamodb.aws.credentials.type=static
+quarkus.dynamodb.aws.credentials.static-provider.access-key-id=test-key
+quarkus.dynamodb.aws.credentials.static-provider.secret-access-key=test-secret
+```
 
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+
+### Esses valores são para uso com o AWS DynamoDB
+```
+quarkus.dynamodb.aws.region=<USAR-A-LOCALIZACAO-DO-DYNAMODB>
+quarkus.dynamodb.aws.credentials.type=default
+```
 
 ### SmallRye Health
 
