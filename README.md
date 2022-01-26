@@ -2,7 +2,7 @@
 
 Projeto baseado em Quarkus para possibilitar a listagem de usuarios. 
 
-## Executar a aplicação in dev mode
+## Executar a aplicação in dev mode (localmente):
 
 Executando com live coding:
 ```shell script
@@ -16,13 +16,8 @@ docker build -f src/main/docker/Dockerfile.jvm -t <SEU-DOCKERHUB-ID>/userlist-jv
 docker push <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
 ```
 
-
-# Testando a aplicação:
-```shell script
-curl --location --request GET 'http:\<DNS\>/usuario'
-```
-
-## Aplicar os manifestos presentes em "src/main/kubernetes" para o deploy ocorrer:
+# Deploy Aplicação
+## Aplicar os manifestos presentes em "src/main/kubernetes" para o deploy no cluster:
 ## Importante:
 - Necessário uma Infra com o Service Mesh
 - Alterar a imagem existente no arquivo 02.deployament.yaml
@@ -41,6 +36,12 @@ containers:
 kubectl apply -f src/main/kubernetes
 ```
 
+
+# Testando a aplicação:
+```shell script
+curl --location --request GET 'http:\<DNS\>/usuario'
+```
+
 # Testes locais
 
 ### Container para simular dynamodb:
@@ -50,7 +51,7 @@ docker run --publish 8000:8000 amazon/dynamodb-local:1.11.477 -jar DynamoDBLocal
 
 ### Acessar no browser
 ```
-http://localhost:8000
+http://localhost:8000/shell/
 ```
 
 
