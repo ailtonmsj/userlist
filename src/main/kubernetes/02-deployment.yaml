@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: userlist
-  namespace: userapp
+  namespace: userlist
   labels:
     app: userlist
 spec:

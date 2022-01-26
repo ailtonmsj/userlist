@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: userlist-gateway
-  namespace: userapp
+  namespace: userlist
 spec:
   selector:
     istio: ingressgateway

@@ -2,7 +2,7 @@ apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
 metadata:
   name: userlist
-  namespace: userapp
+  namespace: userlist
 spec:
   gateways:
   - userlist-gateway
@@ -12,6 +12,8 @@ spec:
   - match:
     - uri:
         prefix: /usuario
+      method:
+        exact: GET
     rewrite:
       uri: /usuario
     route:
