@@ -1,48 +1,15 @@
-# Userlist Project
+# UserUpdate Project
 
-Projeto baseado em Quarkus para possibilitar a listagem de usuarios. 
+Projeto baseado em Quarkus para possibilitar a atualização de usuarios. 
 
-## Executar a aplicação in dev mode (localmente):
+<br >
+
+# Executar a aplicação localmente (in dev mode):
 
 Executando com live coding:
 ```shell script
 ./mvnw compile quarkus:dev
 ```
-
-# Build da Imagem Docker
-```
-mvn package
-docker build -f src/main/docker/Dockerfile.jvm -t <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0 .
-docker push <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
-```
-
-# Deploy Aplicação
-## Aplicar os manifestos presentes em "src/main/kubernetes" para o deploy no cluster:
-## Importante:
-- Necessário uma Infra com o Service Mesh
-- Alterar a imagem existente no arquivo 02.deployament.yaml
-- Se ambiente de execução AWS deve ter acesso nas tabelas do DynamoDB
-- Link do terraform para criação da infra: https://github.com/ailtonmsj/aws-new-stack
-```
-...
-containers:
-      - image: <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
-        name: userlist-jvm
-...
-```
-
-### Executar:
-```
-kubectl apply -f src/main/kubernetes
-```
-
-
-# Testando a aplicação:
-```shell script
-curl --location --request GET 'http:\<DNS\>/usuario'
-```
-
-# Testes locais
 
 ### Container para simular dynamodb:
 ```
@@ -70,24 +37,77 @@ dynamodb.createTable(params, function(err, data) {
 });
 ```
 
+<br >
+
+# URL para teste (cURL):
+```shell script
+curl --location --request GET 'http:\<DNS\>/usuario'
+```
+
+## Exemplo:
+```
+```shell script
+curl --location --request GET 'http:localhost:8091/usuario'
+```
+<br >
+
+### IMPORTANTE: Para o profile de dev (quarkus:dev) a porta utilizada para essa aplicação é 8091, porém o default para acesso é 8080 como serviço, e se aplicado no cluster o manifesto kubernetes e a porta 80.
+
+<br >
+<br >
+
+# Para executar em Cluster com Service Mesh:
+
+## Build da Imagem Docker
+```
+mvn package
+docker build -f src/main/docker/Dockerfile.jvm -t <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0 .
+docker push <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
+```
+
+## Aplicar os manifestos presentes em "src/main/kubernetes" para o deploy ocorrer:
+### Importante:
+- Necessário uma Infra com o Service Mesh
+- Alterar a imagem existente no arquivo 02.deployament.yaml
+- Se ambiente de execução AWS deve ter acesso nas tabelas do DynamoDB
+- Link do terraform para criação da infra: https://github.com/ailtonmsj/aws-new-stack
+```
+...
+containers:
+      - image: <SEU-DOCKERHUB-ID>/userlist-jvm:1.0.0
+        name: userlist-jvm
+...
+```
+
+### Executar:
+```
+kubectl apply -f src/main/kubernetes
+```
+
 ## Alterar o applications.properties para esse valor de acordo com o ambiente do dynamodb:
-
-### Esses valores são para testes locais
-```
-quarkus.dynamodb.endpoint-override=http://localhost:8000
-
-quarkus.dynamodb.aws.region=eu-central-1
-quarkus.dynamodb.aws.credentials.type=static
-quarkus.dynamodb.aws.credentials.static-provider.access-key-id=test-key
-quarkus.dynamodb.aws.credentials.static-provider.secret-access-key=test-secret
-```
-
 
 ### Esses valores são para uso com o AWS DynamoDB
 ```
-quarkus.dynamodb.aws.region=<USAR-A-LOCALIZACAO-DO-DYNAMODB>
+quarkus.dynamodb.aws.region=<USAR-REGION-DO-DYNAMODB>
 quarkus.dynamodb.aws.credentials.type=default
 ```
+
+<br >
+
+# Códigos de Resposta
+
+### 200 - OK - Usuario Adicionado com Sucesso
+### 400 - Bad Request - Rever parametros de entrada
+### 500 - Server Erro - Erro no Servidor de aplicação
+
+<br />
+
+# Aplicações Relacionadas:
+
+### https://github.com/ailtonmsj/userupdate
+### https://github.com/ailtonmsj/useradd
+
+<br />
 
 ### SmallRye Health
 
